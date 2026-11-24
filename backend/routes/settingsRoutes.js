@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import protect from '../middleware/authMiddleware.js';
+import { getSettings, updateSettings, updateProfile, changePassword } from '../controllers/settingsController.js';
+const router = Router();
+router.use(protect);
+router.get('/', getSettings);
+router.put('/', updateSettings);
+router.patch('/profile', updateProfile);
+router.patch('/password', changePassword);
+export default router;

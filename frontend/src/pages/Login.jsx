@@ -1,0 +1,52 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+export default function Login(){
+  const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false);const {authenticate}=useAuth();
+  const nav=useNavigate();
+  const submit=async e=>{e.preventDefault();
+    setBusy(true);
+    setError('');
+    try{await authenticate('login',{email,password});
+    nav('/');
+  }
+  catch(err){setError(err.response?.data?.message||'Unable to sign in');
+  }
+  finally{setBusy(false);
+  }
+};
+return <AuthShell eyebrow="WELCOME BACK" title="Good to see you." subtitle="Your people are just a message away.">
+  <form onSubmit={submit} className="auth-form">
+    <label>Email address<input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" required/>
+    </label>
+    <label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required/></label>
+    {error&&<p className="form-error">{error}</p>
+    }
+    <button className="primary-btn" disabled={busy}>{busy?'Signing in...':'Sign in →'}</button>
+    </form>
+    <p className="auth-switch">New to Chatterly? <Link to="/register">Create an account</Link></p>
+    </AuthShell>
+    }
+export function AuthShell({eyebrow,title,subtitle,children}){
+  return <div className="auth-page">
+    <div className="auth-visual">
+      <div className="brand">
+        <div className="brand-mark">c.</div>
+        <span>chatterly</span>
+        </div>
+        <div className="visual-copy">
+          <span className="eyebrow">A LITTLE CLOSER, EVERY DAY</span>
+          <h1>Conversations<br/>that feel like <em>home.</em></h1>
+          <p>Less noise. More meaning. Stay close to the people who matter.</p>
+          </div>
+          <div className="visual-bottom">✦ &nbsp; Your corner of the internet</div>
+          </div>
+          <div className="auth-panel">
+            <div className="auth-content">
+              <span className="eyebrow">{eyebrow}</span>
+              <h2>{title}</h2>
+              <p>{subtitle}</p>
+              {children}</div>
+              </div>
+              </div>
+              }
